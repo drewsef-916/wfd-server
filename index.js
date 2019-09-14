@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const axios = require('axios')
 const cors = require('cors')
+const PORT = process.env.PORT || 5000
 
 const app = express()
 app.use(cors())
@@ -14,3 +15,5 @@ app.get(`/recipes`, async (req, res) => {
         console.log(error)
     }
 })
+
+app.listen(PORT, () => console.log(`app running on port ${PORT}`))
