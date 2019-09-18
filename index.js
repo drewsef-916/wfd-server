@@ -5,11 +5,20 @@ const cors = require('cors')
 const PORT = process.env.PORT || 5000
 
 const app = express()
-PORT === 5000 ?
-app.use(cors()) :
-app.use(cors({
-    origin: 'https://whats-for-dinner.netlify.com'
-}))
+
+const whitelist = ['//localhost:3000', 'https://whats-for-dinner.netlify.com']
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions))
 
 app.get(`/`, (req, res) => {
     res.send(`API root`)
@@ -24,7 +33,7 @@ app.get(`/recipes`, async (req, res) => {
     }
 })
 
-app.post('/add-recipe', jsonParser, async (req, res) => {
+app.post('/add-recipe', async (req, res) => {
     try {
       await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
         id: req.body.id,
