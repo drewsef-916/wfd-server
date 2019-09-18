@@ -5,7 +5,11 @@ const cors = require('cors')
 const PORT = process.env.PORT || 5000
 
 const app = express()
-app.use(cors())
+PORT === 5000 ?
+app.use(cors()) :
+app.use(cors({
+    origin: 'https://whats-for-dinner.netlify.com'
+}))
 
 app.get(`/`, (req, res) => {
     res.send(`API root`)
@@ -15,9 +19,32 @@ app.get(`/recipes`, async (req, res) => {
     try {
         const recipes = await axios.get(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`)
         res.send(JSON.stringify(recipes.data));
-    } catch (error) {
-        console.log(error)
+    } catch (err) {
+        console.log(err)
     }
 })
+
+app.post('/add-recipe', jsonParser, async (req, res) => {
+    try {
+      await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
+        id: req.body.id,
+        name: req.body.name,
+        ingredients: req.body.ingredients,
+        directions: req.body.directions
+      })
+      res.send('Success!')
+    } catch(err) {
+      console.log(err)
+    }
+  })
+
+//   app.delete('/delete-recipe', async (req, res) => {
+//       try {
+//         await axios.delete(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes/${req.body.id}?apiKey=${process.env.MLAB_SECRET}`)
+//         res.send('You have sucessfully deleted the recipe!')
+//       } catch(err) {
+//         console.log(err)
+//       }
+//   })
 
 app.listen(PORT, () => console.log(`app running on port ${PORT}`))
