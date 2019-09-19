@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5000
 
 const app = express()
 
-const whitelist = ['//localhost:3000', 'https://whats-for-dinner.netlify.com']
+const whitelist = ['http://localhost:3000', 'https://localhost:3000', 'https://whats-for-dinner.netlify.com']
 
 const corsOptions = {
   origin: (origin, callback) => {
