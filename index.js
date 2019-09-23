@@ -40,7 +40,8 @@ app.get(`/recipe/:id`, async (req, res) => {
       const match = recipes.data.find(recipe => {
         recipe.id === routeId
       })
-      res.send(match)
+      console.log(match)
+      res.send(JSON.stringify(match))
     } catch (err) {
       console.log(err)
     }
