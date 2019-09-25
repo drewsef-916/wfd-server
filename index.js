@@ -48,18 +48,19 @@ app.get(`/recipe/:id`, async (req, res) => {
 })
 
 app.post('/add-recipe', async (req, res) => {
-    try {
-      console.dir(req.body)
-      await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
-        id: req.body.id,
-        name: req.body.name,
-        ingredients: req.body.ingredients,
-        directions: req.body.directions
-      })
-      res.send('Success!')
-    } catch(err) {
-      console.log(err)
-    }
+    res.send(req)
+    // try {
+    //   console.dir(req)
+    //   await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
+    //     id: req.body.id,
+    //     name: req.body.name,
+    //     ingredients: req.body.ingredients,
+    //     directions: req.body.directions
+    //   })
+    //   res.send('Success!')
+    // } catch(err) {
+    //   console.log(err)
+    // }
   })
 
 //   app.delete('/delete-recipe', async (req, res) => {
