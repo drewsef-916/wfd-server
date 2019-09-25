@@ -18,7 +18,8 @@ const corsOptions = {
   }
 }
 
-app.use(bodyParser)
+const jsonParser = bodyParser.json()
+
 app.use(cors(corsOptions))
 
 app.get(`/`, (req, res) => {
@@ -34,21 +35,21 @@ app.get(`/recipes`, async (req, res) => {
     }
 })
 
-app.get(`/recipe/:id`, async (req, res) => {
-    try {
-      const recipes = await axios.get(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`)
-      const routeId = req.params.id
-      const match = recipes.data.find(recipe => {
-        recipe.id === routeId
-      })
-      console.log(match)
-      res.send(JSON.stringify(match))
-    } catch (err) {
-      console.log(err)
-    }
-})
+// app.get(`/recipe/:id`, jsonParser, async (req, res) => {
+//     try {
+//       const recipes = await axios.get(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`)
+//       const routeId = req.params.id
+//       const match = recipes.data.find(recipe => {
+//         recipe.id === routeId
+//       })
+//       console.log(match)
+//       res.send(JSON.stringify(match))
+//     } catch (err) {
+//       console.log(err)
+//     }
+// })
 
-app.post('/add-recipe', async (req, res) => {
+app.post('/add-recipe', jsonParser, async (req, res) => {
     try {
       await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
         id: req.body.id,
