@@ -8,19 +8,19 @@ const app = express()
 
 const whitelist = ['http://localhost:3000', 'https://localhost:3000', 'https://whats-for-dinner.netlify.com']
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 
 const jsonParser = bodyParser.json()
 
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.get(`/`, (req, res) => {
     res.send(`API root`)
@@ -34,20 +34,6 @@ app.get(`/recipes`, async (req, res) => {
         console.log(err)
     }
 })
-
-// app.get(`/recipe/:id`, jsonParser, async (req, res) => {
-//     try {
-//       const recipes = await axios.get(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`)
-//       const routeId = req.params.id
-//       const match = recipes.data.find(recipe => {
-//         recipe.id === routeId
-//       })
-//       console.log(match)
-//       res.send(JSON.stringify(match))
-//     } catch (err) {
-//       console.log(err)
-//     }
-// })
 
 app.post('/add-recipe', jsonParser, async (req, res) => {
     try {
