@@ -35,6 +35,18 @@ app.get(`/recipes`, async (req, res) => {
     }
 })
 
+app.put(`/recipe`, jsonParser, async (req, res) => {
+  try {
+    const updatedRecipe = await axios.put(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes/${req.body._id}?apiKey=${process.env.MLAB_SECRET}`, {
+      "$set" : {"lastEaten": req.body.lastEaten}
+    })
+    console.log(updatedRecipe)
+    res.send('Recipe updated')
+  } catch (err) {
+    console.log(err)
+  }
+})
+
 app.post('/add-recipe', jsonParser, async (req, res) => {
     try {
       await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
