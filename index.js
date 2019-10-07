@@ -38,7 +38,7 @@ app.get(`/recipes`, async (req, res) => {
 app.put(`/recipe`, jsonParser, async (req, res) => {
   const jsonToday = new Date().toJSON();
   const justTheDate = jsonToday.slice(0, 10);
-  const plusOneEaten = req.body.reqTimesEaten++
+  const plusOneEaten = req.body.reqTimesEaten + 1
   try {
     const updatedRecipe = await axios({
       method: 'put',
@@ -46,7 +46,10 @@ app.put(`/recipe`, jsonParser, async (req, res) => {
       data: JSON.stringify( { "$set" : {
         "lastEaten": justTheDate,
         "timesEaten": plusOneEaten
-      }})
+      }}),
+      headers: {
+        "Content-Type":"application/json"
+      }
     })
     res.send(updatedRecipe)
   } catch (err) {
