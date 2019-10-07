@@ -40,14 +40,15 @@ app.put(`/recipe`, jsonParser, async (req, res) => {
   const justTheDate = jsonToday.slice(0, 10);
   const plusOneEaten = req.body.timesEaten++
   try {
-    console.log(req.body)
+    console.log('mlab recipe id: ', req.body._id)
+    console,log('recipe id: ', req.body.id)
     const updatedRecipe = await axios({
       method: 'put',
       url: `https://api.mlab.com/api/1/databases/wfddev/collections/recipes/${req.body._id}?apiKey=${process.env.MLAB_SECRET}`,
-      data: {
-        lastEaten: justTheDate,
-        timesEaten: plusOneEaten
-      }
+      data: JSON.stringify( { "$set" : {
+        "lastEaten": justTheDate,
+        "timesEaten": plusOneEaten
+      }})
     })
     res.send(updatedRecipe)
   } catch (err) {
