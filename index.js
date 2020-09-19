@@ -43,16 +43,18 @@ app.put(`/recipe`, jsonParser, async (req, res) => {
   const plusOneEaten = req.body.reqTimesEaten + 1
   try {
     const updatedRecipe = await axios({
-      method: 'put',
-      url: `https://api.mlab.com/api/1/databases/wfddev/collections/recipes/${req.body.mlabId}?apiKey=${process.env.MLAB_SECRET}`,
-      data: JSON.stringify( { "$set" : {
-        "lastEaten": justTheDate,
-        "timesEaten": plusOneEaten
-      }}),
+      method: "put",
+      url: `https://mongo-data-api-wfd/api/1/databases/wfddev/collections/recipes/${req.body.mlabId}?apiKey=${process.env.MLAB_DATA_API_KEY}`,
+      data: JSON.stringify({
+        $set: {
+          lastEaten: justTheDate,
+          timesEaten: plusOneEaten,
+        },
+      }),
       headers: {
-        "Content-Type":"application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
     res.send(updatedRecipe)
   } catch (err) {
     console.log(err)
@@ -62,12 +64,15 @@ app.put(`/recipe`, jsonParser, async (req, res) => {
 
 app.post('/add-recipe', jsonParser, async (req, res) => {
     try {
-      await axios.post(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`, {
-        id: req.body.id,
-        name: req.body.name,
-        ingredients: req.body.ingredients,
-        directions: req.body.directions
-      })
+      await axios.post(
+        `https://mongo-data-api-wfd/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_DATA_API_KEY}`,
+        {
+          id: req.body.id,
+          name: req.body.name,
+          ingredients: req.body.ingredients,
+          directions: req.body.directions,
+        }
+      );
       res.send('Success!')
     } catch(err) {
       console.log(err)
