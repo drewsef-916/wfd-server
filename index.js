@@ -13,7 +13,9 @@ app.get(`/`, (req, res) => {
 
 app.get(`/recipes`, async (req, res) => {
     try {
-        const recipes = await axios.get(`https://api.mlab.com/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_SECRET}`)
+        const recipes = await axios.get(
+          `https://mongo-data-api-wfd/api/1/databases/wfddev/collections/recipes?apiKey=${process.env.MLAB_DATA_API_KEY}`
+        );
         res.send(JSON.stringify(recipes.data));
     } catch (error) {
         console.log(error)
